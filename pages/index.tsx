@@ -1,7 +1,8 @@
-import { Rating } from "../components";
 import { useState } from "react";
+import { Rating } from "../components";
+import { withLayout } from "../hoc/WithLayout";
 
-export default function Home() {
+function Home() {
   const [rating, setRating] = useState(4);
   return (
     <>
@@ -13,3 +14,5 @@ export default function Home() {
     </>
   );
 }
+
+export default withLayout(Home);
