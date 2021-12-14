@@ -15,9 +15,9 @@ function Home({menu}: HomeProps) {
       <Rating rating={ rating } isEditable setRating={ setRating }/>
       <Rating rating={ 5 }/>
 
-      <ul>
-        { menu.map(menuItem => <li key={ menuItem._id.secondCategory }>{ menuItem._id.secondCategory }</li>) }
-      </ul>
+      {/*<ul>*/}
+      {/*  { menu.map(menuItem => <li key={ menuItem._id.secondCategory }>{ menuItem._id.secondCategory }</li>) }*/}
+      {/*</ul>*/}
     </>
   );
 }
