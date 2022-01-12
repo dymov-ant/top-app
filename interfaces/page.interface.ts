@@ -22,17 +22,18 @@ export interface HhData {
 
 export interface TopPageModel {
   _id: string;
+  title: string;
   tags: string[];
   secondCategory: string;
   alias: string;
   category: string;
-  seoText: string;
+  seoText?: string;
   tagsTitle: string;
   metaTitle: string;
   metaDescription: string;
   firstCategory: TopLevelCategory;
-  advantages: TopPageAdvantage[];
+  advantages?: TopPageAdvantage[];
   createdAt: Date;
   updatedAt: Date;
-  hh: HhData;
+  hh?: HhData;
 }

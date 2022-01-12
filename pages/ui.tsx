@@ -1,6 +1,6 @@
 import { Button, Title, Text, Tag } from "../components/UI";
 
-export default function UI() {
+export default function Ui() {
   return (
     <div className="ui-page">
       <Title tag="h1">Основные UI элементы</Title>
