@@ -4,11 +4,16 @@ import { Tag, Title } from "../../components/UI";
 import { TopLevelCategory } from "../../interfaces/page.interface";
 import { Advantages, HHData, Sort } from "../../components";
 import { SortEnum } from "../../components/Sort/Sort.props";
-import styles from "./TopPageComponent.module.css";
 import { sortReducer } from "./sort.reducer";
+import { Product } from "../../components/Product/Product";
+import styles from "./TopPageComponent.module.css";
 
 const TopPageComponent = ({ page, products, firstCategory }: TopPageComponentProps) => {
-  const [{ products: sortedProducts, sort }, dispatchSort] = useReducer(sortReducer, { products, sort: SortEnum.Rating });
+  const [{ products: sortedProducts, sort }, dispatchSort] = useReducer(sortReducer, {
+    products,
+    sort: SortEnum.Rating,
+  });
+
 
   const setSort = (sort: SortEnum) => {
     dispatchSort({ type: sort });
@@ -18,11 +23,11 @@ const TopPageComponent = ({ page, products, firstCategory }: TopPageComponentPro
     <div>
       <div className={ styles.title }>
         <Title tag="h1">{ page.title }</Title>
-        { products && <Tag color="gray" size="middle">{ products.length }</Tag> }
+        { sortedProducts && <Tag color="gray" size="middle">{ sortedProducts.length }</Tag> }
         <Sort sort={ sort } setSort={ setSort }/>
       </div>
       <div>
-        { sortedProducts && sortedProducts.map(product => <div key={ product._id }>{ product.title }</div>) }
+        { sortedProducts && sortedProducts.map(product => <Product key={ product._id } product={ product }/>) }
       </div>
       <div className={ styles.hhTitle }>
         <Title tag="h2">Вакансии - { page.category }</Title>

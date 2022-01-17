@@ -1,4 +1,4 @@
-import { Button, Title, Text, Tag } from "../components/UI";
+import { Button, Title, Text, Tag, Input, Textarea } from "../components/UI";
 
 export default function Ui() {
   return (
@@ -27,7 +27,7 @@ export default function Ui() {
         <Button variant="ghost" arrow="right">Ghost arrow right</Button>
       </div>
 
-      <div style={{border: "1px solid teal", padding: "25px"}}>
+      <div style={{border: "1px solid teal", padding: "25px", marginBottom: "25px"}}>
         <Title tag="h2">Тэги</Title>
         <hr/>
 
@@ -46,6 +46,15 @@ export default function Ui() {
         <Tag color="red">middle red</Tag>
         <Tag color="gray">middle gray</Tag>
         <Tag color="green">middle green</Tag>
+      </div>
+
+      <div style={{border: "1px solid teal", padding: "25px", marginBottom: "25px"}}>
+        <Title tag="h2">Формы</Title>
+        <hr/>
+        <Input placeholder="input"/>
+        <br/>
+        <br/>
+        <Textarea placeholder="textarea"/>
       </div>
     </div>
   );
