@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { TopPageComponentProps } from "./TopPageComponent.props";
 import { Tag, Title } from "../../components/UI";
 import { TopLevelCategory } from "../../interfaces/page.interface";
@@ -14,6 +14,9 @@ const TopPageComponent = ({ page, products, firstCategory }: TopPageComponentPro
     sort: SortEnum.Rating,
   });
 
+  useEffect(() => {
+    dispatchSort({ type: "refresh", newState: products });
+  }, [products]);
 
   const setSort = (sort: SortEnum) => {
     dispatchSort({ type: sort });

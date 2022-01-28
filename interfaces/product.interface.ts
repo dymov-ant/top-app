@@ -34,3 +34,7 @@ export interface ProductModel {
   advantages?: string;
   disadvantages?: string;
 }
+
+export interface IReviewSentResponse {
+  message: string;
+}

@@ -1,19 +1,21 @@
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
+import { ParsedUrlQuery } from "querystring";
 import { withLayout } from "../../hoc/WithLayout";
 import { MenuItem } from "../../interfaces/menu.interfase";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
-import axios from "axios";
 import { TopLevelCategory, TopPageModel } from "../../interfaces/page.interface";
 import { ProductModel } from "../../interfaces/product.interface";
 import { firstLevelMenu } from "../../helpers/helpers";
-import { ParsedUrlQuery } from "querystring";
 import { TopPageComponent } from "../../pageComponents";
+import { getMenuByFirstCategory } from "../../api/menu";
+import { getPageByAlias } from "../../api/page";
+import { getProductsByCategory } from "../../api/product";
 
 function TopPage({ products, page, firstCategory }: TopPageProps): JSX.Element {
   return (
     <TopPageComponent
-      page={page}
-      products={products}
-      firstCategory={firstCategory}
+      page={ page }
+      products={ products }
+      firstCategory={ firstCategory }
     />
   );
 }
@@ -30,10 +32,8 @@ interface TopPageProps extends Record<string, unknown> {
 export const getStaticPaths: GetStaticPaths = async () => {
   let paths: string[] = [];
   for (const menuItem of firstLevelMenu) {
-    const { data: menu } = await axios.post<MenuItem[]>(`${ process.env.NEXT_PUBLIC_DOMAIN }/api/top-page/find`, {
-      firstCategory: menuItem.id,
-    });
-    paths = paths.concat(menu.flatMap(item => item.pages.map(pageItem => `/${menuItem.route}/${ pageItem.alias }`)));
+    const { data: menu } = await getMenuByFirstCategory(menuItem.id);
+    paths = paths.concat(menu.flatMap(item => item.pages.map(pageItem => `/${ menuItem.route }/${ pageItem.alias }`)));
   }
 
   return {
@@ -57,22 +57,29 @@ export const getStaticProps: GetStaticProps<TopPageProps> = async ({ params }: G
   }
 
   try {
-    const { data: menu } = await axios.post<MenuItem[]>(`${ process.env.NEXT_PUBLIC_DOMAIN }/api/top-page/find`, {
-      firstCategory: firstCategoryItem.id,
-    });
+    const { data: menu, status: menuStatus } = await getMenuByFirstCategory(firstCategoryItem.id);
 
-    if (menu.length === 0) {
+    if (menu.length === 0 || menuStatus !== 200) {
       return {
         notFound: true,
       };
     }
 
-    const { data: page } = await axios.get<TopPageModel>(`${ process.env.NEXT_PUBLIC_DOMAIN }/api/top-page/byAlias/${ params.alias }`);
+    const { data: page, status: pageStatus } = await getPageByAlias(params.alias as string);
 
-    const { data: products } = await axios.post<ProductModel[]>(`${ process.env.NEXT_PUBLIC_DOMAIN }/api/product/find`, {
-      category: page.category,
-      limit: 10,
-    });
+    if (pageStatus !== 200) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const { data: products, status: productsStatus } = await getProductsByCategory(page.category);
+
+    if (productsStatus !== 200) {
+      return {
+        notFound: true,
+      };
+    }
 
     return {
       props: {
